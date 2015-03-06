@@ -16,19 +16,19 @@ shinyUI(fluidPage(
   sidebarLayout(
     sidebarPanel(
       sliderInput("iteration",
-                  "Number of iterations:", min = 1, max = 20, value = 1),
+                  "Number of iterations:", min = 1, max = 20, value = 1, animate = TRUE),
       br(),
       wellPanel(
         helpText("Probabilities per iteration:"),
       sliderInput("pUP",
-                  "Probability of getting sicker:", min = 1, max = 80, value = 50),
+                  "Probability of getting sicker:", min = 1, max = 70, value = 50),
       br(),
       sliderInput("pDN",
-                  "Probability of recovery:", min = 5, max = 30, value = 10))),
+                  "Probability of recovery:", min = 10, max = 50, value = 10))),
 
     # Show a plot of the generated distribution
     mainPanel(
-      plotOutput("distPlot")
+      plotOutput("distPlot", width = "650px", height = "650px")
     )
   )
 ))

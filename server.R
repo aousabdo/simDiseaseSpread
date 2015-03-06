@@ -10,7 +10,8 @@ library(shiny)
 shinyServer(function(input, output) {
 
   dataTable <- reactive({
-    N <- 20 # number of iterations to go through
+    N <- 20 # maximum number of iterations to go through
+    
     pUP <- input$pUP/100.
     pDN <- input$pDN/100.
     
