@@ -25,12 +25,18 @@ makePlot <- function(DT, level = 1){
   Level <- paste('level', level, sep=".")
   p <- ggplot(population, aes(x = x, y = y))
   p <- p + geom_point(aes_string(col = Level),
-                      position=position_jitter(width=0.2, height=0.2), size = 12) + theme_bw()
-  p <- p + theme(legend.position = "none",
-                 axis.text.x = element_text(colour = "white"),
-                 axis.title.x = element_text(colour="white"),
-                 axis.text.y = element_text(colour = "white"),
-                 axis.title.y = element_text(colour="white"))
+                      position=position_jitter(width=0.2, height=0.2), size = 12) 
+  p <- p + theme(axis.line=element_blank(),
+                 axis.text.x=element_blank(),
+                 axis.text.y=element_blank(),
+                 axis.ticks=element_blank(),
+                 axis.title.x=element_blank(),
+                 axis.title.y=element_blank(),
+                 legend.position="none",
+                 panel.grid.major=element_blank(),
+                 panel.background = element_rect(fill = "#F0F0F0", colour = "grey50", size = 2),
+                 panel.grid.minor=element_blank()
+                 )
   p <- p + scale_color_manual(values=c("#30AC30", "#FF3030", "#FFCC00"))
   print(p)
 }
