@@ -63,6 +63,7 @@ Bo <- function(DT){
 }
 
 makePlot <- function(DT, level = 1){
+  set.seed(123)
   population <- copy(DT)
   Level <- paste('level', level, sep=".")
   p <- ggplot(population, aes(x = x, y = y))
