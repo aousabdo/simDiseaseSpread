@@ -87,7 +87,22 @@ makePlot <- function(DT, level = 1){
 
 linePlot <- function(DT){
   trend <- melt(Bo(DT), id = 'iter')
-  pline <- ggplot(trend, aes(x = iter, y = value, col = variable)) + geom_line() + theme_bw()
-  pline <- pline + theme(legend.position = "bottom")
+  pline <- ggplot(trend, aes(x = iter, y = value, col = variable)) + geom_point() + geom_line() + theme_bw()
+  pline <- pline + theme(legend.position = "bottom") + xlim(1,30) + xlab("Iteration") + ylab("Count")
+  pline <- pline + geom_smooth(method = "lm", se = TRUE, fullrange = TRUE, formula = 'y ~ ns(x, 2)', 
+                               aes(fill = variable), alpha = 0.115, lty = 2) + facet_wrap(~ variable)
+  pline <- pline + commonTheme
   print(pline)
 }
+
+
+# -------------------------------------------------------------------------------------#
+# common theme for the ggplots
+commonTheme <- theme(axis.text.x = element_text(angle=0, hjust=1, size = 14),
+                     axis.title.x = element_text(face="bold", colour="black", size=16),
+                     axis.text.y = element_text(angle=0, hjust=1, size = 14),
+                     axis.title.y = element_text(face="bold", colour="black", size=16),
+                     plot.title = element_text(size = 20), 
+                     legend.title = element_text(colour="black", size=16, face="bold"),
+                     legend.text = element_text(colour="black", size = 16, face = "bold"))
+# -------------------------------------------------------------------------------------#
