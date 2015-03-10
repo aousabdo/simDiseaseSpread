@@ -95,6 +95,29 @@ linePlot <- function(DT){
   print(pline)
 }
 
+# -------------------------------------------------------------------------------------#
+# Add percentages at each iteration. 
+# make plot of those
+# show rate of change plot
+# -------------------------------------------------------------------------------------#
+
+pop <- simPopulation(iter = 20, Npop = 100, pUP = 0.5, pDN = 0.4)
+
+trendPlot <- function(DT){ 
+  pop.tmp <- DT[, lapply(.SD, summary), .SDcols = pop[ ,grep("level", colnames(pop)) ]]
+  pop.tmp[, reference := c("Low", "Moderate", "High")]
+  setkey(pop.tmp, reference)
+  
+  pop.tmp.long <- melt(pop.tmp, id.vars = "reference")
+  pop.tmp.long[, time := rep(seq(1, ncol(pop.tmp)-1), each = 3)]
+  
+  print(pop.tmp.long)
+  p2 <- ggplot(pop.tmp.long, aes(x = time, y = value, col = reference)) + geom_line() + theme_bw()
+  p2 <- p2 + commonTheme
+  print(p2)
+}
+###### THIS IS VERY IMPORTANT
+
 
 # -------------------------------------------------------------------------------------#
 # common theme for the ggplots
