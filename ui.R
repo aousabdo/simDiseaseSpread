@@ -21,7 +21,7 @@ shinyUI(fluidPage(
       wellPanel(
         helpText("Probabilities per iteration:"),
         sliderInput("pUP",
-                    "Probability of getting sicker:", min = 1, max = 70, value = 42),
+                    "Probability of getting sicker:", min = 10, max = 50, value = 42),
         br(),
         sliderInput("pDN",
                     "Probability of recovery:", min = 10, max = 50, value = 25))),
