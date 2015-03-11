@@ -7,7 +7,7 @@ library(reshape2)
 bucket <- function(x){
   if(x<3) HS.level <- "Healthy"
   else if(x <5) HS.level <- "Symptomatic"
-  else HS.level <- "Infictious"
+  else HS.level <- "Infectious"
   return(HS.level)
 }
 
@@ -120,7 +120,7 @@ linePlot <- function(DT){
 
 trendPlot <- function(DT){ 
   pop.tmp <- DT[, lapply(.SD, summaryFun), .SDcols = DT[ , grep("level", colnames(DT)) ]]
-  pop.tmp[, reference := c("Healthy", "Symptomatic", "Infictious")]
+  pop.tmp[, reference := c("Healthy", "Symptomatic", "Infectious")]
   setkey(pop.tmp, reference)
   
   pop.tmp.long <- melt(pop.tmp, id.vars = "reference")
@@ -130,9 +130,9 @@ trendPlot <- function(DT){
   p2 <- p2 + theme(legend.position = "bottom") + ylab("Percentage of Populatoin\n") + xlab("\nTime (Hours)")
   p2 <- p2 + ggtitle("Trend of Disease Outbreak Over Time\n")
   p2 <- p2 + commonTheme
-  p2 <- p2 +  scale_color_manual(name  = "", breaks = c("Healthy", "Infictious", "Symptomatic"),
-                                 labels =  c("Healthy  ", "Symptomatic  ", "Infictious  "),
-                                 values = c("Healthy" = "#30AC30", "Symptomatic" = "#FF3030", "Infictious" = "#FFCC00"))
+  p2 <- p2 +  scale_color_manual(name  = "", breaks = c("Healthy", "Infectious", "Symptomatic"),
+                                 labels =  c("Healthy  ", "Symptomatic  ", "Infectious  "),
+                                 values = c("Healthy" = "#30AC30", "Symptomatic" = "#FF3030", "Infectious" = "#FFCC00"))
   print(p2)
 }
 ###### THIS IS VERY IMPORTANT
@@ -141,7 +141,7 @@ summaryFun <- function(x){
   tmp <- summary(x)
   if(is.na(tmp["Healthy"])){tmp["Healthy"] <- 0}
   if(is.na(tmp["Symptomatic"])){tmp["Symptomatic"] <- 0}
-  if(is.na(tmp["Infictious"])){tmp["Infictious"] <- 0}
+  if(is.na(tmp["Infectious"])){tmp["Infectious"] <- 0}
   return(tmp)
 }
 
