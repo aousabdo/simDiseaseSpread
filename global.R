@@ -77,16 +77,15 @@ Bo <- function(DT){
 makePlot <- function(DT, level = 1){
   set.seed(123)
   population <<- copy(DT)
-
+  
   Level <- paste('level', level, sep=".")
   Change <- paste('change', level , level-1 , sep="_")
-
-    p <- ggplot(population, aes(x = x, y = y))
+  
+  p <- ggplot(population, aes(x = x, y = y))
   p <- p + geom_point(aes_string(fill = Level), shape = 21, size = 12, col = "white") 
   if(level >= 2){
-    p <- p + geom_point(shape = 21, aes_string(col = Change), size = 12)
+    p <- p + geom_point(shape = 21, aes_string(col = Change), size = 14)
     p <- p + scale_color_manual(values=c("black", "white", "white"), breaks = c("Recovery", "Sicker", "Steady"))
-    # population[, print(eval(parse(text = Change)))]
   }
   p <- p + theme(axis.line=element_blank(),
                  axis.text.x=element_blank(),
