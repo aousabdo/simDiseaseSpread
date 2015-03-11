@@ -10,7 +10,7 @@ library(shiny)
 shinyUI(fluidPage(
   
   # Application title
-  titlePanel("Simulation of Disease Spread in a Population"),
+  titlePanel("Simulation of Disease Outbreak in a Population"),
   
   # Sidebar with a slider input for number of bins
   sidebarLayout(
