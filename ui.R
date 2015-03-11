@@ -30,7 +30,8 @@ shinyUI(fluidPage(
     mainPanel(
       tabsetPanel(
         tabPanel("Outbreak", plotOutput("outbreakPlot", width = "600px", height = "550px")),
-        tabPanel("Line Plot", plotOutput("linePlot", width = "1000px", height = "800px"))
+        tabPanel("Line Plot", plotOutput("linePlot", width = "1000px", height = "800px")),
+        tabPanel("Trend Plot", plotOutput("trendPlot", width = "800px", height = "650px"))
         )
       )
     )

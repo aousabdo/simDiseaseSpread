@@ -19,12 +19,18 @@ shinyServer(function(input, output) {
     
     return(population)
   })
+  
   output$outbreakPlot <- renderPlot({
     simPop <- dataTable()
     makePlot(DT = simPop, level = input$iteration)
   })
+  
   output$linePlot <- renderPlot({
     linePlot(dataTable())
+  })
+  
+  output$trendPlot <- renderPlot({
+    trendPlot(dataTable())
   })
   
 })

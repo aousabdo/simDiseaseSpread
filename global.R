@@ -101,23 +101,32 @@ linePlot <- function(DT){
 # show rate of change plot
 # -------------------------------------------------------------------------------------#
 
-pop <- simPopulation(iter = 20, Npop = 100, pUP = 0.5, pDN = 0.4)
-
 trendPlot <- function(DT){ 
-  pop.tmp <- DT[, lapply(.SD, summary), .SDcols = pop[ ,grep("level", colnames(pop)) ]]
-  pop.tmp[, reference := c("Low", "Moderate", "High")]
+  pop.tmp <- DT[, lapply(.SD, summaryFun), .SDcols = DT[ , grep("level", colnames(DT)) ]]
+  pop.tmp[, reference := c("Healthy", "Symptomatic", "Infictious")]
   setkey(pop.tmp, reference)
   
   pop.tmp.long <- melt(pop.tmp, id.vars = "reference")
   pop.tmp.long[, time := rep(seq(1, ncol(pop.tmp)-1), each = 3)]
   
-  print(pop.tmp.long)
-  p2 <- ggplot(pop.tmp.long, aes(x = time, y = value, col = reference)) + geom_line() + theme_bw()
+  p2 <- ggplot(pop.tmp.long, aes(x = time, y = value, col = reference)) + geom_line(size = 1.25) + geom_point(size = 4) + theme_bw()
+  p2 <- p2 + theme(legend.position = "bottom") + ylab("Percentage of Populatoin\n") + xlab("\nTime (Hours)")
+  p2 <- p2 + ggtitle("Trend of Disease Outbreak Over Time\n")
   p2 <- p2 + commonTheme
+  p2 <- p2 +  scale_color_manual(name  = "", breaks = c("Healthy", "Infictious", "Symptomatic"),
+                                 labels =  c("Healthy  ", "Symptomatic  ", "Infictious  "),
+                                 values = c("Healthy" = "#30AC30", "Symptomatic" = "#FF3030", "Infictious" = "#FFCC00"))
   print(p2)
 }
 ###### THIS IS VERY IMPORTANT
 
+summaryFun <- function(x){
+  tmp <- summary(x)
+  if(is.na(tmp["Healthy"])){tmp["Healthy"] <- 0}
+  if(is.na(tmp["Symptomatic"])){tmp["Symptomatic"] <- 0}
+  if(is.na(tmp["Infictious"])){tmp["Infictious"] <- 0}
+  return(tmp)
+}
 
 # -------------------------------------------------------------------------------------#
 # common theme for the ggplots
