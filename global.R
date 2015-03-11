@@ -37,16 +37,24 @@ simPopulation <- function(iter, Npop, pUP, pDN){
     three <- paste0("level.", i)
     four <- paste("change", i, i-1, sep = "_")
     population[, as.character(one) := sapply(eval(parse(text=two)), change, p_up = pUP, p_dn = pDN)]
-    population[, as.character(four) := diag(outer(eval(parse(text = one)), eval(parse(text= two)), "-"))]
+    population[, as.character(four) := as.factor(sapply(diag(outer(eval(parse(text = one)), eval(parse(text= two)), "-")), factorize))]
+    # population[, as.character(four) := sapply(eval(parse(text = four)), factorize)]
     population[, as.character(three) := as.factor(sapply(eval(parse(text=one)), bucket))]
   }
   return(population)
 }
 
+factorize <- function(x){
+  if(x < 0) value <- "Recovery"
+  else if(x == 0) value <- "Steady"
+  else value <- "Sicker"
+  return(value)
+}
+
 Bo <- function(DT){
   
   DT.tmp <- copy(DT)
-
+  
   # delete unwanted columns
   cols <- c(1, 2, DT[, grep("level", colnames(DT))], DT[, grep("change", colnames(DT))])
   DT.tmp[, (cols) := NULL]
@@ -68,12 +76,18 @@ Bo <- function(DT){
 
 makePlot <- function(DT, level = 1){
   set.seed(123)
-  population <- copy(DT)
+  population <<- copy(DT)
+
   Level <- paste('level', level, sep=".")
-  p <- ggplot(population, aes(x = x, y = y))
-  p <- p + geom_point(aes_string(col = Level),
-                      position=position_jitter(width=0.2, height=0.2), 
-                      size = 12) 
+  Change <- paste('change', level , level-1 , sep="_")
+
+    p <- ggplot(population, aes(x = x, y = y))
+  p <- p + geom_point(aes_string(fill = Level), shape = 21, size = 12, col = "white") 
+  if(level >= 2){
+    p <- p + geom_point(shape = 21, aes_string(col = Change), size = 12)
+    p <- p + scale_color_manual(values=c("black", "white", "white"), breaks = c("Recovery", "Sicker", "Steady"))
+    # population[, print(eval(parse(text = Change)))]
+  }
   p <- p + theme(axis.line=element_blank(),
                  axis.text.x=element_blank(),
                  axis.text.y=element_blank(),
@@ -85,7 +99,7 @@ makePlot <- function(DT, level = 1){
                  panel.background = element_rect(fill = "#F0F0F0", colour = "grey50", size = 2),
                  panel.grid.minor=element_blank()
   )
-  p <- p + scale_color_manual(values=c("#30AC30", "#FF3030", "#FFCC00"))
+  p <- p + scale_fill_manual(values=c("#30AC30", "#FF3030", "#FFCC00"))
   print(p)
 }
 
