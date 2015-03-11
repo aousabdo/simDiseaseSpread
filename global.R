@@ -20,12 +20,6 @@ change <- function(HS, p_up, p_dn){
   return(HS)
 }
 
-recovery <- function(x1, x2){
-  if((x2 - x1) < 0) value <- 1 
-  else value <- 0
-  return(value)
-}
-
 simPopulation <- function(iter, Npop, pUP, pDN){
   # initial distribution of health statuses
   Npop <- 100 # number of simulated personas
