@@ -20,6 +20,12 @@ change <- function(HS, p_up, p_dn){
   return(HS)
 }
 
+recovery <- function(x1, x2){
+  if((x2 - x1) < 0) value <- 1 
+  else value <- 0
+  return(value)
+}
+
 simPopulation <- function(iter, Npop, pUP, pDN){
   # initial distribution of health statuses
   Npop <- 100 # number of simulated personas
@@ -32,10 +38,12 @@ simPopulation <- function(iter, Npop, pUP, pDN){
   population[, level.1 := as.factor(sapply(HS.1, bucket))]
   
   for(i in 2:iter){
-    one <- paste("HS",i, sep=".")
-    two <- paste("HS",i-1, sep=".")
-    three <- paste("level", i, sep=".")
+    one <- paste0("HS.",i)
+    two <- paste0("HS.",i-1)
+    three <- paste0("level.", i)
+    four <- paste("change", i, i-1, sep = "_")
     population[, as.character(one) := sapply(eval(parse(text=two)), change, p_up = pUP, p_dn = pDN)]
+    population[, as.character(four) := diag(outer(eval(parse(text = one)), eval(parse(text= two)), "-"))]
     population[, as.character(three) := as.factor(sapply(eval(parse(text=one)), bucket))]
   }
   return(population)
@@ -44,7 +52,9 @@ simPopulation <- function(iter, Npop, pUP, pDN){
 Bo <- function(DT){
   
   DT.tmp <- copy(DT)
-  cols <- c('x', 'y', paste('level', 1:((ncol(DT.tmp)-2)/2) , sep = "."))
+
+  # delete unwanted columns
+  cols <- c(1, 2, DT[, grep("level", colnames(DT))], DT[, grep("change", colnames(DT))])
   DT.tmp[, (cols) := NULL]
   
   vec <- vector()
