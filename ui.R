@@ -16,7 +16,7 @@ shinyUI(fluidPage(
   sidebarLayout(
     sidebarPanel(
       sliderInput("iteration",
-                  "Number of iterations:", min = 1, max = 20, value = 1, animate = TRUE),
+                  "Number of iterations:", min = 1, max = 20, value = 1, animate = animationOptions(interval = 1250, loop = FALSE)),
       br(),
       wellPanel(
         helpText("Probabilities per iteration:"),
